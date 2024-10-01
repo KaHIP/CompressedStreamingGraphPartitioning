@@ -77,6 +77,15 @@ Note:
   `Line 70: option(64BITVERTEXMODE "64 bit mode" ON)`, and then run `./compile.sh`. By default, 64 bit vertex IDs are enabled. 
 - For a description of the METIS graph format, please have a look at the [KaHiP manual](https://github.com/KaHIP/KaHIP/raw/master/manual/kahip.pdf).
 
+## Data References
+In our work, we performed experiments with graphs sourced from the following repositories:
+- SNAP Dataset: https://snap.stanford.edu/data/
+- 10th Dimacs Challenge: https://sites.cc.gatech.edu/dimacs10/downloads.shtml
+- Laboratory for Web Algorithmics: https://law.di.unimi.it/datasets.php
+- Network Repository Website: https://networkrepository.com/
+
+For our experiments, we converted these graphs to the METIS format, while removing parallel edges, self-loops, and directions, and assigning unitary weight to all nodes and edges.
+
 ## Additional Information
 This repository includes another program, `deploy/stream_cpi_generated`, in which a user can partition a graph generated on-the-fly with a novel **streaming graph generator**. The streaming graph generator is also
 made available open-source in the following GitHub repository: https://github.com/adilchhabra/KaGen, which includes instructions on how a user can experiment with various graph generation models in a streaming setting. 
