@@ -1,0 +1,6 @@
+[submodule "extern/stxxl"]
+	path = extern/stxxl
+	url = https://github.com/stxxl/stxxl.git
+[submodule "extern/KaGen"]
+	path = extern/KaGen
+	url = https://github.com/adilchhabra/KaGen.git
