@@ -138,7 +138,6 @@ add_library(libstreampartitioning OBJECT ${LIBSTREAMPARTITIONING_SOURCE_FILES})
 target_link_libraries(libstreampartitioning PRIVATE cpi)
 
 # generate targets for each binary
-#add_executable(freight_graphs app/streammultisection.cpp $<TARGET_OBJECTS:libpart> $<TARGET_OBJECTS:argtab> $<TARGET_OBJECTS:libkaffpa> $<TARGET_OBJECTS:libmapping> $<TARGET_OBJECTS:libstreampartitioning> )
 add_executable(stream_cpi app/streamcpi.cpp)
 target_compile_definitions(stream_cpi PRIVATE "-DMODE_FREIGHT_GRAPHS")
 target_link_libraries(stream_cpi
