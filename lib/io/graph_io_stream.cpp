@@ -68,17 +68,11 @@ void graph_io_stream::readFirstLineStream(PartitionConfig &partition_config,
     } else {
         if (partition_config.stream_nodes_assign == NULL &&
             partition_config.rle_length == -1) {
-            std::cout << "Using std::vector of size " << partition_config.total_nodes
-                      << std::endl;
             partition_config.stream_nodes_assign = new std::vector<PartitionID>(
                     partition_config.remaining_stream_nodes, INVALID_PARTITION);
         } else if (partition_config.rle_length == -2) {
-            std::cout << "Using external memory PQ with time-forward processing"
-                      << std::endl;
             partition_config.external_pq_partition_assign = new ExternalPQ();
             if (partition_config.evaluate) {
-                std::cout << "Running eval.. (not accurate for memory consumption)"
-                          << std::endl;
                 partition_config.stream_nodes_assign = new std::vector<PartitionID>(
                         partition_config.remaining_stream_nodes, INVALID_PARTITION);
             }
@@ -342,7 +336,6 @@ void graph_io_stream::streamEvaluatePartition(PartitionConfig &config,
     }
     double balance_part_weight = ceil(total_weight / (double) config.k);
     balance = max / balance_part_weight;
-    std::cout << "Computed balance: " << balance << std::endl;
 }
 
 void graph_io_stream::writePartitionStream(PartitionConfig &config,

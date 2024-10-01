@@ -109,12 +109,14 @@ public:
         } else {
             std::cout << "Part ID: Fennel" << std::endl;
         }
-        if (config.rle_length > -1) {
+        if (config.rle_length > 0) {
             std::cout << "RLE Length: " << config.rle_length << std::endl;
         } else if (config.rle_length == -2) {
             std::cout << "External Memory Priority Queue" << std::endl;
+        } else if (config.rle_length == 0) {
+            std::cout << "RLE Length: n" << std::endl;
         } else {
-            std::cout << "RLE Length: None" << std::endl;
+            std::cout << "Using std::vector" << std::endl;
         }
         std::cout << "Kappa: " << config.kappa << std::endl;
 
