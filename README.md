@@ -39,14 +39,15 @@ To partition a graph in METIS format using StreamCPI, run
 ```shell
 ./stream_cpi <graph filename> --k=<number of blocks> 
 ```
+By default, the partitioner stores the resulting block assignments in a file identified by `graph_k.txt`. To obtain more information pertaining to the quality of the partition, such as, edge cut, running time, memory consumption, etc., pass the flag `--write_results`.
 
 To partition a graph in METIS format using the StreamCPI with complete run length compression, run
 
 ```shell
-./stream_cpi <graph filename> --k=<number of blocks> --rle_length=0 
+./stream_cpi <graph filename> --k=<number of blocks> --rle_length=<mode, eg., 0, refer to table below>
 ```
 
-The `--rle_length` flag can be set to various values depending on which mode you wish to select.
+The `--rle_length` flag can be set to various values depending on which mode you wish to select. Refer to the following table. 
 
 | rle_length  | mode                                                                                     |
 |-------------|------------------------------------------------------------------------------------------|
@@ -58,7 +59,7 @@ The `--rle_length` flag can be set to various values depending on which mode you
 To further enhance memory reduction and faster runtime, pass a flag `--kappa` to encourage repeated block assignments. 
 
 ```shell
-./stream_cpi <graph filename> --k=<number of blocks> --rle_length=0 --kappa=20
+./stream_cpi <graph filename> --k=<number of blocks> --rle_length=<mode, eg., 0> --kappa=<scale factor, eg. 20>
 ```
  
 For a complete list of parameters alongside with descriptions, run:
@@ -73,3 +74,23 @@ Note:
 - To partition graphs in StreamCPI with 64 bit vertex IDs, edit the CMakeLists.txt file to change `Line 70: option(64BITVERTEXMODE "64 bit mode" OFF)` to
   `Line 70: option(64BITVERTEXMODE "64 bit mode" ON)`, and then run `./compile.sh`. By default, 64 bit vertex IDs are enabled. 
 - For a description of the METIS graph format, please have a look at the [KaHiP manual](https://github.com/KaHIP/KaHIP/raw/master/manual/kahip.pdf).
+
+## Additional Information
+This repository includes another program, `deploy/stream_cpi_generated`, in which a user can partition a graph generated on-the-fly with a novel **streaming graph generator**. The streaming graph generator is also
+made available open-source in the following GitHub repository: https://github.com/adilchhabra/KaGen, which includes instructions on how a user can experiment with various graph generation models in a streaming setting. 
+This has wide applicability across all streaming algorithms under development for experimentation and testing. Soon, this streaming generator will be integrated into the popular 
+KaGen graph generation repository: https://github.com/KarlsruheGraphGeneration/KaGen.
+
+To partition a generated Barabassi-Albert graph using StreamCPI, run
+
+```shell
+./stream_cpi_generated <partition_output_filename> --k=<number of blocks> --rle_length=<mode> --kappa=<scaling factor> --ba --nodes_to_generate=<n> --kagen_d_ba=<avg. deg. of BA graph generation> --kagen_chunk_count=<num. of chunks within which to generate graph>
+```
+
+To partition a generated RGG2D graph using StreamCPI, run
+
+```shell
+./stream_cpi_generated <partition_output_filename> --k=<number of blocks> --rle_length=<mode> --kappa=<scaling factor> --rgg2d --nodes_to_generate=<n> --kagen_r=<radius of RGG graph generation> --kagen_chunk_count=<num. of chunks within which to generate graph>
+```
+
+Please refer to https://github.com/adilchhabra/KaGen to learn more about the graph generation models and their corresponding parameters. 

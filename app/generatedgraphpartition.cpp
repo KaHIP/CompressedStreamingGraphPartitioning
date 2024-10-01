@@ -120,9 +120,10 @@ int main(int argn, char **argv) {
 
     bool already_fully_partitioned;
     pid_t processID = getpid();
-    config.nodes_to_generate = (pow(2, config.nodes_to_generate));
-    config.kagen_chunk_count = (pow(2, config.kagen_chunk_count));
-    //config.nodes_to_generate = 10000000000;
+    
+    //config.nodes_to_generate = (pow(2, config.nodes_to_generate));
+    //config.kagen_chunk_count = (pow(2, config.kagen_chunk_count));
+
     if (config.nodes_to_generate < 0 || config.nodes_to_generate > std::numeric_limits<NodeID>::max()) {
 	throw std::out_of_range("Value is out of range.");
     }
@@ -261,37 +262,36 @@ int main(int argn, char **argv) {
 
     long overall_max_RSS = getMaxRSS();
     std::string baseFilename = extractBaseFilename(graph_filename);
-    if (!config.suppress_output) {
-        if (((config.one_pass_algorithm == ONEPASS_HASHING) ||
-             (config.one_pass_algorithm == ONEPASS_HASHING_CRC32)) && !config.evaluate) {
-            total_edge_cut = 0;
-        } else {
-            if (config.rle_length != -2 || config.evaluate) {
-                streamEvaluatePartitionGenerated(config, graph_filename,
-                                                 total_edge_cut, qap, streamGenerator,
-                                                 block_assignments);
+    if (config.write_results) {
+        if (!config.suppress_output) {
+            if (((config.one_pass_algorithm == ONEPASS_HASHING) ||
+                 (config.one_pass_algorithm == ONEPASS_HASHING_CRC32)) && !config.evaluate) {
+                total_edge_cut = 0;
+            } else {
+                if (config.rle_length != -2 || config.evaluate) {
+                    streamEvaluatePartitionGenerated(config, graph_filename,
+                                                     total_edge_cut, qap, streamGenerator,
+                                                     block_assignments);
+                }
             }
+            balance = qm.balance_full_stream(*config.stream_blocks_weight);
         }
-        balance = qm.balance_full_stream(*config.stream_blocks_weight);
-    }
 
-    CapturedValues capturedValues;
-    //if (config.rle_length == -1) {
-    //    std::streambuf *original_cout_buffer = std::cout.rdbuf();
-    //    std::cout.rdbuf(redirected_cout.rdbuf());
-    //    std::cout << "Performing RLE compression test..." << std::endl;
-    //    cpi::RunLengthCompression rlc(*config.stream_nodes_assign);
-    //    auto p_id = rlc[42];    // access partition ids;
-    //    rlc.print_statistics(); // print statistics
-    //    std::string output_str = redirected_cout.str();
-    //    capturedValues = parseCapturedValues(output_str);
-    //    std::cout.rdbuf(original_cout_buffer);
-    //} else {
+        CapturedValues capturedValues;
         capturedValues.space_in_bytes = 0;
         capturedValues.uncompressed_space_in_bytes = 0;
         capturedValues.space_in_mib = 0;
         capturedValues.relative = 0;
-    //}
+        FlatBufferWriter fb_writer;
+        fb_writer.updateResourceConsumption(buffer_io_time, global_mapping_time,
+                                            total_time, overall_max_RSS);
+        fb_writer.updatePartitionMetrics(total_edge_cut, balance);
+        fb_writer.updateCompressionStatistics(
+                capturedValues.space_in_bytes,
+                capturedValues.uncompressed_space_in_bytes, capturedValues.space_in_mib,
+                capturedValues.relative);
+        fb_writer.write(baseFilename, config);
+    }
 
     // write the partition to the disc
     std::stringstream filename;
@@ -307,18 +307,6 @@ int main(int argn, char **argv) {
         }
     } else {
         std::cout << "No partition will be written as output." << std::endl;
-    }
-
-    if (config.write_results) {
-        FlatBufferWriter fb_writer;
-        fb_writer.updateResourceConsumption(buffer_io_time, global_mapping_time,
-                                            total_time, overall_max_RSS);
-        fb_writer.updatePartitionMetrics(total_edge_cut, balance);
-        fb_writer.updateCompressionStatistics(
-                capturedValues.space_in_bytes,
-                capturedValues.uncompressed_space_in_bytes, capturedValues.space_in_mib,
-                capturedValues.relative);
-        fb_writer.write(baseFilename, config);
     }
 
     return 0;

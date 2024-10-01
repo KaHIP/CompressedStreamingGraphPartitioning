@@ -165,16 +165,18 @@ public:
         builder.Finish(partition);
 
         //Step 4: Write to File
-        const uint8_t *bufferPointer = builder.GetBufferPointer();
-        int bufferSize = builder.GetSize();
+        if(config.write_results) {
+            const uint8_t *bufferPointer = builder.GetBufferPointer();
+            int bufferSize = builder.GetSize();
 
-        std::string outputFileNameStream;
-        outputFileNameStream = config.output_path + baseFilename + "_" + std::to_string(config.k) + "_" +
-                                                    std::to_string(config.kappa) + ".bin";
-        const char *outputFileName = outputFileNameStream.c_str();
-        FILE *file = fopen(outputFileName, "wb");
-        fwrite(bufferPointer, 1, bufferSize, file);
-        fclose(file);
+            std::string outputFileNameStream;
+            outputFileNameStream = config.output_path + baseFilename + "_" + std::to_string(config.k) + "_" +
+                                   std::to_string(config.kappa) + ".bin";
+            const char *outputFileName = outputFileNameStream.c_str();
+            FILE *file = fopen(outputFileName, "wb");
+            fwrite(bufferPointer, 1, bufferSize, file);
+            fclose(file);
+        }
     }
 };
 

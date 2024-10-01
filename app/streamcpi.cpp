@@ -218,66 +218,66 @@ int main(int argn, char **argv) {
   long overall_max_RSS = getMaxRSS();
   std::string baseFilename = extractBaseFilename(graph_filename);
 
-  if (!config.suppress_output) {
-      if (((config.one_pass_algorithm == ONEPASS_HASHING) ||
-           (config.one_pass_algorithm == ONEPASS_HASHING_CRC32)) && !config.evaluate) {
-          total_edge_cut = 0;
-      } else {
-          if (config.rle_length != -2 || config.evaluate) {
-              graph_io_stream::streamEvaluatePartition(config, graph_filename,
-                                                       total_edge_cut, qap,
-                                                       block_assignments);
-          }
-      }
-        balance = qm.balance_full_stream(*config.stream_blocks_weight);
-  }
-
-  CapturedValues capturedValues;
-  if (config.rle_length == -1 && ((config.one_pass_algorithm != ONEPASS_HASHING) &&
-                                  (config.one_pass_algorithm != ONEPASS_HASHING_CRC32))) {
-    std::streambuf *original_cout_buffer = std::cout.rdbuf();
-    std::cout.rdbuf(redirected_cout.rdbuf());
-    std::cout << "Performing RLE compression test..." << std::endl;
-    cpi::RunLengthCompression rlc(*config.stream_nodes_assign);
-    auto p_id = rlc[42];    // access partition ids;
-    rlc.print_statistics(); // print statistics
-    std::string output_str = redirected_cout.str();
-    capturedValues = parseCapturedValues(output_str);
-    std::cout.rdbuf(original_cout_buffer);
-  } else {
-    capturedValues.space_in_bytes = 0;
-    capturedValues.uncompressed_space_in_bytes = 0;
-    capturedValues.space_in_mib = 0;
-    capturedValues.relative = 0;
-  }
-
-  // write the partition to the disc
-  std::stringstream filename;
-  if (!config.filename_output.compare("")) {
-    filename << baseFilename << "_" << config.k;
-  } else {
-    filename << config.filename_output;
-  }
-
-  if (!config.suppress_file_output) {
-    if (config.rle_length != -2 || config.evaluate) {
-      graph_io_stream::writePartitionStream(config, filename.str(), block_assignments);
-    }
-  } else {
-    std::cout << "No partition will be written as output." << std::endl;
-  }
-
   if (config.write_results) {
-    FlatBufferWriter fb_writer;
-    fb_writer.updateResourceConsumption(buffer_io_time, global_mapping_time,
+      if (!config.suppress_output) {
+          if (((config.one_pass_algorithm == ONEPASS_HASHING) ||
+               (config.one_pass_algorithm == ONEPASS_HASHING_CRC32)) && !config.evaluate) {
+              total_edge_cut = 0;
+          } else {
+              if (config.rle_length != -2 || config.evaluate) {
+                  graph_io_stream::streamEvaluatePartition(config, graph_filename,
+                                                           total_edge_cut, qap,
+                                                           block_assignments);
+              }
+          }
+            balance = qm.balance_full_stream(*config.stream_blocks_weight);
+      }
+
+      CapturedValues capturedValues;
+      if (config.rle_length == -1 && ((config.one_pass_algorithm != ONEPASS_HASHING) &&
+                                      (config.one_pass_algorithm != ONEPASS_HASHING_CRC32))) {
+        std::streambuf *original_cout_buffer = std::cout.rdbuf();
+        std::cout.rdbuf(redirected_cout.rdbuf());
+        std::cout << "Performing RLE compression test..." << std::endl;
+        cpi::RunLengthCompression rlc(*config.stream_nodes_assign);
+        auto p_id = rlc[42];    // access partition ids;
+        rlc.print_statistics(); // print statistics
+        std::string output_str = redirected_cout.str();
+        capturedValues = parseCapturedValues(output_str);
+        std::cout.rdbuf(original_cout_buffer);
+      } else {
+        capturedValues.space_in_bytes = 0;
+        capturedValues.uncompressed_space_in_bytes = 0;
+        capturedValues.space_in_mib = 0;
+        capturedValues.relative = 0;
+      }
+
+      FlatBufferWriter fb_writer;
+      fb_writer.updateResourceConsumption(buffer_io_time, global_mapping_time,
                                         total_time, overall_max_RSS);
-    fb_writer.updatePartitionMetrics(total_edge_cut, balance);
-    fb_writer.updateCompressionStatistics(
+      fb_writer.updatePartitionMetrics(total_edge_cut, balance);
+      fb_writer.updateCompressionStatistics(
         capturedValues.space_in_bytes,
         capturedValues.uncompressed_space_in_bytes, capturedValues.space_in_mib,
         capturedValues.relative);
-    fb_writer.write(baseFilename, config);
+      fb_writer.write(baseFilename, config);
   }
+
+    // write the partition to the disc
+    std::stringstream filename;
+    if (!config.filename_output.compare("")) {
+        filename << baseFilename << "_" << config.k;
+    } else {
+        filename << config.filename_output;
+    }
+
+    if (!config.suppress_file_output) {
+        if (config.rle_length != -2 || config.evaluate) {
+            graph_io_stream::writePartitionStream(config, filename.str(), block_assignments);
+        }
+    } else {
+        std::cout << "No partition will be written as output." << std::endl;
+    }
 
   return 0;
 }
