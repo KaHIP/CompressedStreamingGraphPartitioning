@@ -7,7 +7,7 @@
 In this framework, we offer a novel (semi-)dynamic compression vector that functions as a drop-in replacement to standard arrays, like std::vector in C++, used to store block assignments in streaming graph partitioners. 
 
 This repository contains the code to accompany our paper: *Adil Chhabra, Florian Kurpicz, Christian Schulz, Dominik Schweisgut, Daniel Seemaier. Partitioning Trillion Edge Graphs on Edge Devices. In SIAM Conference on Applied and Computational Discrete Algorithms (ACDA), to appear, 2025.*
-You can find a freely accessible online version [in the arXiv]([https://arxiv.org/abs/1710.07565](https://arxiv.org/abs/2410.07732)).
+You can find a freely accessible online technical report on arXiv: https://arxiv.org/abs/2410.07732.
 
 ## Can we use the (semi-)dynamic compression vector to reduce memory consumption in our streaming algorithm? 
 Yes, if your streaming algorithm stores arrays with repeating values, you can greatly benefit from our compression vector which supports both append and access operations, and is very easy to integrate. The code and more details on how to use the compression vector
