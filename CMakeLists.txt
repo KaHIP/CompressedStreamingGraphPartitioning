@@ -102,10 +102,13 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/flatbuffers
         EXCLUDE_FROM_ALL)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/stxxl)
 
-set(KAGEN_BUILD_APPS OFF)
-set(KAGEN_BUILD_EXAMPLES OFF)
-set(KAGEN_BUILD_TESTS OFF)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/KaGen)
+option(STREAMCPI_BUILD_KAGEN "Build stream_cpi_generated with KaGen support" ON)
+if(STREAMCPI_BUILD_KAGEN AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/extern/KaGen/CMakeLists.txt)
+  set(KAGEN_BUILD_APPS OFF)
+  set(KAGEN_BUILD_EXAMPLES OFF)
+  set(KAGEN_BUILD_TESTS OFF)
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/KaGen)
+endif()
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STXXL_CXX_FLAGS} -fno-builtin-malloc -fno-builtin-calloc -fno-builtin-realloc")
 
@@ -151,17 +154,19 @@ target_link_libraries(stream_cpi
         ${OpenMP_CXX_LIBRARIES})
 install(TARGETS stream_cpi DESTINATION bin)
 
-add_executable(stream_cpi_generated app/generatedgraphpartition.cpp)
-target_compile_definitions(stream_cpi_generated PRIVATE "-DMODE_FREIGHT_GRAPHS")
-target_link_libraries(stream_cpi_generated
-        PRIVATE cpi
-        graphio
-        libkaffpa
-        argtab
-        libstreampartitioning
-        flatbuffers
-        # Linking KaGen increases memory consumption by 3k bytes
-        PUBLIC KaGen::KaGen
-        ${STXXL_LIBRARIES}
-        ${OpenMP_CXX_LIBRARIES})
-install(TARGETS stream_cpi_generated DESTINATION bin)
+if(STREAMCPI_BUILD_KAGEN AND TARGET KaGen::KaGen)
+  add_executable(stream_cpi_generated app/generatedgraphpartition.cpp)
+  target_compile_definitions(stream_cpi_generated PRIVATE "-DMODE_FREIGHT_GRAPHS")
+  target_link_libraries(stream_cpi_generated
+          PRIVATE cpi
+          graphio
+          libkaffpa
+          argtab
+          libstreampartitioning
+          flatbuffers
+          # Linking KaGen increases memory consumption by 3k bytes
+          PUBLIC KaGen::KaGen
+          ${STXXL_LIBRARIES}
+          ${OpenMP_CXX_LIBRARIES})
+  install(TARGETS stream_cpi_generated DESTINATION bin)
+endif()
