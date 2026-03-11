@@ -2,7 +2,7 @@ class Streamcpi < Formula
   desc "StreamCPI - Memory-Efficient Streaming Graph Partitioning via Compression"
   homepage "https://github.com/KaHIP/CompressedStreamingGraphPartitioning"
   license "MIT"
-  head "https://github.com/KaHIP/CompressedStreamingGraphPartitioning.git", branch: "master"
+  head "https://github.com/KaHIP/CompressedStreamingGraphPartitioning.git", branch: "main"
 
   depends_on "cmake" => :build
   depends_on "gcc" => :build
