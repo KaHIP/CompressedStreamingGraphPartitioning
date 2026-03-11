@@ -14,7 +14,7 @@ StreamCPI 1.00
 =====
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/KaHIP/CompressedStreamingGraphPartitioning/master/logo/streamcpi-banner.png" alt="StreamCPI Banner" width="900"/>
+  <img src="https://raw.githubusercontent.com/KaHIP/CompressedStreamingGraphPartitioning/main/logo/streamcpi-banner.png" alt="StreamCPI Banner" width="900"/>
 </p>
 
 **StreamCPI** is a framework for reducing the memory consumption of streaming graph partitioners by compressing block assignments using run-length encoding. Part of the [KaHIP](https://github.com/KaHIP) organization.
