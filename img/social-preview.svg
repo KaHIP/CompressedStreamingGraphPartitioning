@@ -1,0 +1,231 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-strong" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="streamGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#555" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#999" stop-opacity="0.8"/>
+    </linearGradient>
+    <!-- Subtle grid pattern for background -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.02" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="#1a1d23"/>
+  <rect width="1280" height="640" fill="url(#grid)"/>
+
+  <!-- Subtle ambient glow behind the main content area -->
+  <ellipse cx="640" cy="320" rx="500" ry="280" fill="#00bcd4" fill-opacity="0.015"/>
+
+  <!-- ============================================================ -->
+  <!-- TOP SECTION: Title, Subtitle, Tagline, Badge                 -->
+  <!-- ============================================================ -->
+
+  <!-- Title: "Stream" in teal, "CPI" in amber -->
+  <text x="640" y="120" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-weight="bold" font-size="68">
+    <tspan fill="#00bcd4">Stream</tspan><tspan fill="#f39c12">CPI</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="640" y="165" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="24" fill="#aaaaaa">
+    Compressed Streaming Graph Partitioning
+  </text>
+
+  <!-- Tagline -->
+  <text x="640" y="200" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#777777">
+    Memory-efficient streaming partitioning via run-length compression
+  </text>
+
+  <!-- Part of KaHIP badge -->
+  <rect x="570" y="218" width="140" height="30" rx="15" ry="15" fill="#5a7a5a" fill-opacity="0.35" stroke="#5a7a5a" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="640" y="238" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="14" fill="#8faa8f">Part of KaHIP</text>
+
+  <!-- ============================================================ -->
+  <!-- MIDDLE SECTION: Streaming Pipeline Visualization             -->
+  <!-- ============================================================ -->
+
+  <!-- === Left: Input Stream === -->
+
+  <!-- Stream track line -->
+  <line x1="60" y1="400" x2="330" y2="400" stroke="url(#streamGrad)" stroke-width="2"/>
+  <!-- Arrow -->
+  <polygon points="328,395 340,400 328,405" fill="#888"/>
+
+  <!-- Stream label -->
+  <text x="195" y="355" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#666" letter-spacing="1">STREAM INPUT</text>
+
+  <!-- Streaming nodes (incoming, fading in, growing) -->
+  <circle cx="80" cy="400" r="5" fill="#666" opacity="0.15" filter="url(#glow)"/>
+  <circle cx="110" cy="400" r="6" fill="#777" opacity="0.25" filter="url(#glow)"/>
+  <circle cx="143" cy="400" r="7" fill="#888" opacity="0.35" filter="url(#glow)"/>
+  <circle cx="180" cy="400" r="8" fill="#999" opacity="0.45" filter="url(#glow)"/>
+  <circle cx="220" cy="400" r="9" fill="#aaa" opacity="0.58" filter="url(#glow)"/>
+  <circle cx="262" cy="400" r="10" fill="#bbb" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="308" cy="400" r="11" fill="#ddd" opacity="0.85" filter="url(#glow)"/>
+
+  <!-- Node labels (vertex IDs) -->
+  <text x="180" y="404" text-anchor="middle" font-family="monospace" font-size="8" fill="#1a1d23" opacity="0.6">v4</text>
+  <text x="220" y="404" text-anchor="middle" font-family="monospace" font-size="9" fill="#1a1d23" opacity="0.7">v5</text>
+  <text x="262" y="404" text-anchor="middle" font-family="monospace" font-size="9" fill="#1a1d23" opacity="0.8">v6</text>
+  <text x="308" y="404" text-anchor="middle" font-family="monospace" font-size="10" fill="#1a1d23" opacity="0.9">v7</text>
+
+  <!-- === Center: RLE Compression Zone === -->
+
+  <!-- Compression box -->
+  <rect x="365" y="310" width="240" height="180" rx="10" ry="10" fill="#00bcd4" fill-opacity="0.04" stroke="#00bcd4" stroke-opacity="0.2" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Compression zone label -->
+  <text x="485" y="300" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#00bcd4" opacity="0.7" letter-spacing="1">RLE COMPRESS</text>
+
+  <!-- Block Assignment Array (uncompressed, top row in zone) -->
+  <text x="485" y="340" text-anchor="middle" font-family="monospace" font-size="10" fill="#888">block[ ]</text>
+
+  <!-- Uncompressed array cells: R R R B B G G R B B -->
+  <!-- Row 1 -->
+  <rect x="385" y="350" width="20" height="20" rx="3" fill="#e74c3c" opacity="0.75"/>
+  <rect x="408" y="350" width="20" height="20" rx="3" fill="#e74c3c" opacity="0.75"/>
+  <rect x="431" y="350" width="20" height="20" rx="3" fill="#e74c3c" opacity="0.75"/>
+  <rect x="454" y="350" width="20" height="20" rx="3" fill="#3498db" opacity="0.75"/>
+  <rect x="477" y="350" width="20" height="20" rx="3" fill="#3498db" opacity="0.75"/>
+  <rect x="500" y="350" width="20" height="20" rx="3" fill="#2ecc71" opacity="0.75"/>
+  <rect x="523" y="350" width="20" height="20" rx="3" fill="#2ecc71" opacity="0.75"/>
+  <rect x="546" y="350" width="20" height="20" rx="3" fill="#e74c3c" opacity="0.75"/>
+  <rect x="569" y="350" width="20" height="20" rx="3" fill="#3498db" opacity="0.75"/>
+
+  <!-- Cell labels -->
+  <text x="395" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">0</text>
+  <text x="418" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">0</text>
+  <text x="441" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">0</text>
+  <text x="464" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">1</text>
+  <text x="487" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">1</text>
+  <text x="510" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">2</text>
+  <text x="533" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">2</text>
+  <text x="556" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">0</text>
+  <text x="579" y="364" text-anchor="middle" font-family="monospace" font-size="9" fill="#fff" opacity="0.8">1</text>
+
+  <!-- Downward arrow indicating compression -->
+  <line x1="485" y1="378" x2="485" y2="405" stroke="#00bcd4" stroke-opacity="0.4" stroke-width="1.5"/>
+  <polygon points="481,403 485,412 489,403" fill="#00bcd4" fill-opacity="0.5"/>
+
+  <!-- Compressed RLE representation (bottom row in zone) -->
+  <!-- Run: red x3 -->
+  <rect x="390" y="420" width="52" height="24" rx="4" fill="#e74c3c" fill-opacity="0.15" stroke="#e74c3c" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="416" y="436" text-anchor="middle" font-family="monospace" font-size="11" fill="#e74c3c" opacity="0.85">(0, 3)</text>
+
+  <!-- Run: blue x2 -->
+  <rect x="448" y="420" width="52" height="24" rx="4" fill="#3498db" fill-opacity="0.15" stroke="#3498db" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="474" y="436" text-anchor="middle" font-family="monospace" font-size="11" fill="#3498db" opacity="0.85">(1, 2)</text>
+
+  <!-- Run: green x2 -->
+  <rect x="506" y="420" width="52" height="24" rx="4" fill="#2ecc71" fill-opacity="0.15" stroke="#2ecc71" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="532" y="436" text-anchor="middle" font-family="monospace" font-size="11" fill="#2ecc71" opacity="0.85">(2, 2)</text>
+
+  <!-- Run: red x1 -->
+  <rect x="564" y="420" width="34" height="24" rx="4" fill="#e74c3c" fill-opacity="0.15" stroke="#e74c3c" stroke-opacity="0.5" stroke-width="1"/>
+  <text x="581" y="436" text-anchor="middle" font-family="monospace" font-size="10" fill="#e74c3c" opacity="0.85">0,1</text>
+
+  <!-- RLE label -->
+  <text x="485" y="470" text-anchor="middle" font-family="monospace" font-size="10" fill="#00bcd4" opacity="0.5">(block_id, run_length)</text>
+
+  <!-- === Right: Partition Blocks === -->
+
+  <!-- Dashed paths from compression zone to partition blocks -->
+  <path d="M605,370 Q650,370 680,335" fill="none" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="5,4" stroke-opacity="0.4"/>
+  <path d="M605,400 Q650,400 680,400" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="5,4" stroke-opacity="0.4"/>
+  <path d="M605,430 Q650,430 680,465" fill="none" stroke="#2ecc71" stroke-width="1.5" stroke-dasharray="5,4" stroke-opacity="0.4"/>
+
+  <!-- Partition blocks label -->
+  <text x="900" y="290" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#666" letter-spacing="1">PARTITION BLOCKS</text>
+
+  <!-- Partition block 0 (red) -->
+  <rect x="690" y="305" width="260" height="60" rx="8" ry="8" fill="#e74c3c" fill-opacity="0.05" stroke="#e74c3c" stroke-opacity="0.2" stroke-width="1.2"/>
+  <text x="700" y="320" font-family="monospace" font-size="10" fill="#e74c3c" opacity="0.5">k=0</text>
+  <!-- Nodes -->
+  <circle cx="740" cy="335" r="10" fill="#e74c3c" filter="url(#glow)"/>
+  <circle cx="790" cy="325" r="10" fill="#e74c3c" filter="url(#glow)"/>
+  <circle cx="840" cy="340" r="10" fill="#e74c3c" filter="url(#glow)"/>
+  <circle cx="890" cy="328" r="10" fill="#e74c3c" filter="url(#glow)"/>
+  <circle cx="930" cy="338" r="10" fill="#e74c3c" filter="url(#glow)"/>
+  <!-- Edges -->
+  <path d="M740,335 Q765,315 790,325" fill="none" stroke="#e74c3c" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M790,325 Q815,325 840,340" fill="none" stroke="#e74c3c" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M840,340 Q865,328 890,328" fill="none" stroke="#e74c3c" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M890,328 Q910,328 930,338" fill="none" stroke="#e74c3c" stroke-opacity="0.3" stroke-width="1.5"/>
+  <!-- Node IDs -->
+  <text x="740" y="339" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v0</text>
+  <text x="790" y="329" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v1</text>
+  <text x="840" y="344" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v2</text>
+  <text x="890" y="332" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v7</text>
+  <text x="930" y="342" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v9</text>
+
+  <!-- Partition block 1 (blue) -->
+  <rect x="690" y="375" width="260" height="60" rx="8" ry="8" fill="#3498db" fill-opacity="0.05" stroke="#3498db" stroke-opacity="0.2" stroke-width="1.2"/>
+  <text x="700" y="390" font-family="monospace" font-size="10" fill="#3498db" opacity="0.5">k=1</text>
+  <!-- Nodes -->
+  <circle cx="740" cy="405" r="10" fill="#3498db" filter="url(#glow)"/>
+  <circle cx="795" cy="395" r="10" fill="#3498db" filter="url(#glow)"/>
+  <circle cx="850" cy="408" r="10" fill="#3498db" filter="url(#glow)"/>
+  <circle cx="910" cy="400" r="10" fill="#3498db" filter="url(#glow)"/>
+  <!-- Edges -->
+  <path d="M740,405 Q768,388 795,395" fill="none" stroke="#3498db" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M795,395 Q822,395 850,408" fill="none" stroke="#3498db" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M850,408 Q880,398 910,400" fill="none" stroke="#3498db" stroke-opacity="0.3" stroke-width="1.5"/>
+  <!-- Node IDs -->
+  <text x="740" y="409" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v3</text>
+  <text x="795" y="399" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v4</text>
+  <text x="850" y="412" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v8</text>
+  <text x="910" y="404" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v10</text>
+
+  <!-- Partition block 2 (green) -->
+  <rect x="690" y="445" width="260" height="60" rx="8" ry="8" fill="#2ecc71" fill-opacity="0.05" stroke="#2ecc71" stroke-opacity="0.2" stroke-width="1.2"/>
+  <text x="700" y="460" font-family="monospace" font-size="10" fill="#2ecc71" opacity="0.5">k=2</text>
+  <!-- Nodes -->
+  <circle cx="745" cy="475" r="10" fill="#2ecc71" filter="url(#glow)"/>
+  <circle cx="800" cy="468" r="10" fill="#2ecc71" filter="url(#glow)"/>
+  <circle cx="860" cy="478" r="10" fill="#2ecc71" filter="url(#glow)"/>
+  <!-- Edges -->
+  <path d="M745,475 Q772,462 800,468" fill="none" stroke="#2ecc71" stroke-opacity="0.3" stroke-width="1.5"/>
+  <path d="M800,468 Q830,468 860,478" fill="none" stroke="#2ecc71" stroke-opacity="0.3" stroke-width="1.5"/>
+  <!-- Node IDs -->
+  <text x="745" y="479" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v5</text>
+  <text x="800" y="472" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v6</text>
+  <text x="860" y="482" text-anchor="middle" font-family="monospace" font-size="8" fill="#fff" opacity="0.8">v11</text>
+
+  <!-- ============================================================ -->
+  <!-- BOTTOM: Legend                                                -->
+  <!-- ============================================================ -->
+
+  <!-- Legend bar -->
+  <line x1="200" y1="580" x2="1080" y2="580" stroke="#333" stroke-width="0.5"/>
+
+  <!-- Legend items -->
+  <circle cx="340" cy="605" r="6" fill="#e74c3c" opacity="0.75"/>
+  <text x="352" y="609" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#888">Block 0</text>
+
+  <circle cx="440" cy="605" r="6" fill="#3498db" opacity="0.75"/>
+  <text x="452" y="609" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#888">Block 1</text>
+
+  <circle cx="540" cy="605" r="6" fill="#2ecc71" opacity="0.75"/>
+  <text x="552" y="609" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#888">Block 2</text>
+
+  <rect x="630" y="599" width="12" height="12" rx="2" fill="#00bcd4" opacity="0.5"/>
+  <text x="648" y="609" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#888">Run-Length Encoding</text>
+
+  <rect x="800" y="599" width="12" height="12" rx="2" fill="#555" opacity="0.5" stroke="#777" stroke-width="0.5"/>
+  <text x="818" y="609" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#888">Streaming Nodes</text>
+
+</svg>
